@@ -2,7 +2,7 @@
 
 import BackHeader from '@/src/shared/components/BackHeader';
 import { CLASSIFICATION } from '@/src/shared/constants/classification';
-import { type Classification } from '@/src/shared/types/classification';
+import { type ClassificationName } from '@/src/shared/types/classification';
 import BudgetHeader from '@/src/widgets/budget/common/BudgetHeader';
 import BudgetInput from '@/src/widgets/budget/input/BudgetInput';
 import BudgetListDetailDescription from '@/src/widgets/budget/list-detail/BudgetListDetailDescription';
@@ -12,11 +12,11 @@ import React, { useState } from 'react';
 
 interface BudgetListDetailPage {
   params: {
-    classification: Lowercase<Classification>;
+    classification: Lowercase<ClassificationName>;
   };
 }
 
-const VALID_CLASSIFICATION = CLASSIFICATION.map(({ type }) => type.toLowerCase());
+const VALID_CLASSIFICATION = CLASSIFICATION.map(({ name }) => name.toLowerCase());
 
 export default function BudgetListDetailPage({ params }: BudgetListDetailPage) {
   const [budget, setBudget] = useState(0);
@@ -50,7 +50,10 @@ export default function BudgetListDetailPage({ params }: BudgetListDetailPage) {
     <main>
       <BudgetHeader isEnableSave={isEnableSave} onSave={handleSave} />
       <section className="py-16">
-        <BudgetListDetailDescription classification={params.classification} order={order} />
+        <BudgetListDetailDescription
+          classification={params.classification.toUpperCase() as ClassificationName}
+          order={order}
+        />
       </section>
       <section>
         <BudgetInput budget={budget} onChange={setBudget} />
