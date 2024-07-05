@@ -2,19 +2,19 @@ import axios, { AxiosError } from 'axios';
 import { stringify } from 'qs';
 
 export const axiosInstance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_API_DEV_URL : process.env.NEXT_PUBLIC_API_PROD_URL,
+  baseURL: '/wepl-api',
   paramsSerializer(params: any) {
     return stringify(params, {
       arrayFormat: 'comma',
     });
   },
+  withCredentials: true,
 });
 
 // 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   async (error: AxiosError) => {
     if (!error.response) throw error;
@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401) {
       try {
         // 토큰 갱신 요청
-        const response = await axiosInstance.get('/auth/refresh');
+        const response = await axiosInstance.post('/auth/refresh');
 
         if (response.status === 200) {
           // 새 토큰이 쿠키에 저장됨

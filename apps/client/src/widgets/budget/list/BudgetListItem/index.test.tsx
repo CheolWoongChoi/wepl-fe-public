@@ -1,11 +1,13 @@
 import { render } from '@testing-library/react';
 import BudgetListItem from '.';
-import { CLASSIFICATION } from '@/src/shared/constants/classification';
 
 describe('BudgetListItem', () => {
   const data = {
     order: 1,
-    classification: { ...CLASSIFICATION[0] },
+    classification: {
+      type: 'big',
+      name: '대분류',
+    },
     budget: 10000,
   };
 
@@ -15,7 +17,7 @@ describe('BudgetListItem', () => {
     const budgetRegExp = new RegExp(data.budget + '원');
 
     expect(getByText(data.order)).toBeInTheDocument();
-    expect(getByText(data.classification.guide)).toBeInTheDocument();
+    expect(getByText(data.classification.name)).toBeInTheDocument();
     expect(getByText(budgetRegExp)).toBeInTheDocument();
   });
 });
